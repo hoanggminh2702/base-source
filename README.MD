@@ -36,4 +36,4 @@ Router will have
 
 Styling
 
-- Create a in style folder, and import to index.scss in style folder, it will be automaticly imported to app.scss
+- Create scss file in style folder, and import to index.scss in style folder, it will be automaticly imported to app.scss
