@@ -1,7 +1,7 @@
 import RequiredAuth from "@/auth/RequiredAuth";
 import NotFound from "@/components/NotFound";
 import { MyRoute } from "@/types/route";
-import React, { FunctionComponent, ReactNode, ReactNodeArray } from "react";
+import React, { FunctionComponent, ReactNodeArray } from "react";
 import {
   BrowserRouter,
   LayoutRouteProps,
@@ -24,22 +24,27 @@ export const generateRoutes = (routes: MyRoute[]): ReactNodeArray => {
   });
 };
 
-type GenerateRouteProp = (PathRouteProps | LayoutRouteProps) & {
+type GenerateRouteProps = (
+  | Omit<PathRouteProps, "element" | "path">
+  | Omit<LayoutRouteProps, "element" | "path">
+) & {
   route: MyRoute;
-  children?: ReactNode;
 };
 
 export const generateRoute = ({
   route,
+  children,
   ...props
-}: GenerateRouteProp): ReactNodeArray => {
+}: GenerateRouteProps): ReactNodeArray => {
   const Component = route.component;
 
+  // If parent route doesnt have layout, layout is filled by outlet and index is the component of the parent route
   if (route.children && !route.layoutElement) {
     return [
       <Route path={route.path} element={<Outlet />} {...props}>
         {Component && <Route index element={<Component />} />}
-        {(props as LayoutRouteProps).children && props.children}
+        {/* This code will be recursive and gen a array of jsx route */}
+        {children && children}
       </Route>,
     ];
   } else if (route.children && route.layoutElement) {
@@ -62,7 +67,7 @@ export const generateRoute = ({
     return [
       <Route path={route.path} element={<Layout />} {...props}>
         {Component && <Route index element={<Component />} />}
-        {(props as LayoutRouteProps).children && props.children}
+        {children && children}
       </Route>,
     ];
   }
@@ -82,9 +87,7 @@ export const generateRoute = ({
           <NotFound />
         )
       }
-    >
-      {(props as LayoutRouteProps).children && props.children}
-    </Route>,
+    />,
   ];
 };
 
