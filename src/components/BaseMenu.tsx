@@ -15,7 +15,7 @@ const genMenuItem = (routes: Array<MyRoute> | null[]): ItemType[] => {
     if (route) {
       if (route.hideInMenu) return null;
       else {
-        if (route.children) {
+        if (route.children && !route.hideChildren) {
           const returnedChildren = [...route.children] as MyRoute[];
           route.component &&
             returnedChildren.unshift({
@@ -49,7 +49,7 @@ const genMenuItem = (routes: Array<MyRoute> | null[]): ItemType[] => {
 
 const genOpenSubMenuKeysArr = (routes: MyRoute[]): string[] => {
   return routes.reduce((totalKeys, curRoute) => {
-    if (curRoute.children && !curRoute.hideChildren) {
+    if (curRoute.children && !curRoute.defaultCloseChildren) {
       return [
         ...totalKeys,
         `sub-${curRoute.path}`,

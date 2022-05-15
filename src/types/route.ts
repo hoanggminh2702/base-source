@@ -13,7 +13,8 @@ export type CustomRoute = {
   layoutElement?: FunctionComponent<any> | FunctionComponent<RootLayoutProps>; // If route is layout route, this is the Layout Component of the route
   component?: FunctionComponent<any>; // If route is layout route, this will be component the index route, else this route will be the component of the route
   children?: Array<CustomRoute>;
-  hideChildren?: boolean;
+  hideChildren?: boolean; // Hide the Children or not
+  defaultCloseChildren?: boolean; // Make the submenu expand or not
 };
 
 export type MyRoute = RemoveOptionalProperty<CustomRoute, "key">;
